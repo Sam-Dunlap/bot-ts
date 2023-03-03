@@ -10,14 +10,19 @@ import {
     LiveTracker,
     sockets,
     commands,
+    commandsArr
 } from "./utils/index.js";
 import { Battle, Command } from "./types/index.js";
 // Setting things up
 dotenv.config();
 
 // When the client boots up
-client.on("ready", () => {
+client.on("ready", async () => {
+    console.log('poopoo peepee');
     console.log(`${client.user!.username} is online!`);
+    console.log('this is commands array: ', commandsArr);
+    await client.application?.commands.set(commandsArr);
+    console.log('this is commands array: ',commandsArr);
     client.user!.setActivity(
         `${Battle.numBattles} PS Battles in ${client.guilds.cache.size} servers.`,
         {
