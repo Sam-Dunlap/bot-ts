@@ -21,7 +21,7 @@ class Prisma {
                 channelId: obj.channelId,
             },
             update: {
-                system: obj.system as "D" | "DM" | "C" | "S" | "DL",
+                system: obj.system as "D" | "DM" | "C" | "S" | "DL" ?? "D",
                 name: obj.leagueName ?? league?.name,
                 resultsChannelId: obj.resultsChannelId ?? "",
                 dlId: obj.dlId ?? "",
@@ -32,7 +32,7 @@ class Prisma {
                 name: obj.leagueName ?? "",
                 guildId: obj.guildId ?? "",
                 channelId: obj.channelId,
-                system: obj.system as "D" | "DM" | "C" | "S" | "DL",
+                system: obj.system as "D" | "DM" | "C" | "S" | "DL" ?? "D",
                 resultsChannelId: obj.resultsChannelId ?? "",
                 dlId: obj.dlId ?? "",
                 sheetId: obj.sheetId ?? "",
