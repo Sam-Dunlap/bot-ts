@@ -3,19 +3,28 @@ import {
     CommandInteraction,
 } from "discord.js";
 import axios from "axios";
-import { Prisma, ReplayTracker, slashAnalyzeUpdate } from "../utils/index.js";
-import { Command } from "../types/index.js";
+import { Prisma, ReplayTracker, funcs } from "../utils/index.js";
+import { writeFileSync } from "fs";
 
 export default {
     name: "analyze",
     description: "Analyzes Pokemon Showdown replays.",
     aliases: ["analyse"],
     usage: "[replay link]",
+    options: [
+        {
+            name: "link",
+            description: "PS replay link",
+            required: true,
+            type: 3,
+        },
+    ],
     async execute(
         interaction: CommandInteraction,
         options: CommandInteractionOptionResolver
     ) {
-        const replayLink = options.getString("replay") as string;
+        const replayLink = options.getString("link") as string;
+        console.log(replayLink);
         const urlRegex = /(https?:\/\/[^ ]*)/;
         const links = replayLink.match(urlRegex);
 
@@ -23,16 +32,15 @@ export default {
         if (replayLink.length >= 1950) {
             return await interaction.reply({
                 content: `:x: Your replay length is too long.`,
-                ephemeral: true
-            })
+                ephemeral: true,
+            });
         }
 
         if (!(replayLink.includes("replay") && links)) {
             return await interaction.reply({
                 content: `:x: ${replayLink} is not a replay.`,
-                ephemeral: true
-            }
-            );
+                ephemeral: true,
+            });
         }
         await interaction.deferReply();
 
@@ -43,7 +51,7 @@ export default {
             })
             .catch(async (e) => {
                 await interaction.editReply(
-                    ":x: Something went wrong. Please check your reply link."
+                    ":x: Something went wrong. Please check your replay link."
                 );
                 return;
             });
@@ -58,12 +66,18 @@ export default {
 
         let replayer = new ReplayTracker(replayLink, rules);
         const matchJson = await replayer.track(data);
+        const csvResponse = funcs.formatToCSV(matchJson);
+        writeFileSync("output.csv", csvResponse);
+        await interaction.editReply(
+            `${matchJson.playerNames[0]} vs ${matchJson.playerNames[1]}`
+        );
 
         if (matchJson.error) {
             return await interaction.editReply(matchJson.error);
         }
-
-        await slashAnalyzeUpdate(matchJson, interaction);
         console.log(`${link} has been analyzed!`);
+        return await interaction.channel?.send({
+            files: ["output.csv"],
+        });
     },
-} as Command;
+};
