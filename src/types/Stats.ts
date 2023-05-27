@@ -1,15 +1,16 @@
+import Pokemon from "./Pokemon";
 import Rules from "./Rules";
 
-interface Stats {
+export interface Stats {
     players: {
         [key: string]: {
             ps: string;
             kills: { [key: string]: { [key: string]: number } };
             deaths: { [key: string]: number };
             league_id?: string;
-        },
+        };
     };
-    playerNames: string[]
+    playerNames: string[];
     info: {
         replay: string;
         history: string;
@@ -23,4 +24,16 @@ interface Stats {
     error?: string;
 }
 
-export default Stats;
+export interface RawStats {
+    playerNames: string[];
+    p1Pokemon: { [key: string]: Pokemon };
+    p2Pokemon: { [key: string]: Pokemon };
+    info: {
+        replay: string;
+        history: string;
+        turns: number;
+        winner: string;
+        loser: string;
+    };
+    error?: string;
+}
