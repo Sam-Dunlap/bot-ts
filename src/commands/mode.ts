@@ -4,6 +4,7 @@ import {
     CommandInteractionOptionResolver,
     TextBasedChannel,
     GuildMember,
+    EmbedBuilder,
 } from "discord.js";
 import { System } from "@prisma/client";
 
@@ -48,7 +49,7 @@ const updateDb = async (
                 modes[mode] || "Default"
             } mode! ${
                 modes[mode] === "Sheets"
-                    ? "Please give full editing permissions to `master@porygonthebot.iam.gserviceaccount.com`; I won't be able to work without it."
+                    ? "Please give full editing permissions to `sam-dunlap@porygonupdate.iam.gserviceaccount.com`; I won't be able to work without it."
                     : ""
             }`,
             ephemeral: true,
@@ -69,7 +70,7 @@ const updateDb = async (
                 modes[mode] || "Default"
             } mode! ${
                 modes[mode] === "Sheets"
-                    ? "Please give full editing permissions to `master@porygonthebot.iam.gserviceaccount.com`; I won't be able to work without it."
+                    ? "Please give full editing permissions to `sam-dunlap@porygonupdate.iam.gserviceaccount.com`; I won't be able to work without it."
                     : ""
             }`,
             ephemeral: true,
@@ -79,15 +80,62 @@ const updateDb = async (
 
 export default {
     name: "mode",
-    description:
-        "Sets the stats updating mode. Run without any parameters to get more info.",
+    description: "Sets the stats updating mode. Run describe to get more info.",
     usage: "[mode name with hyphen] [parameter]",
+    options: [
+        {
+            name: "describe",
+            description: "in-depth explanation of modes",
+            type: 1,
+        },
+        {
+            name: "channel",
+            description: "output to specified channel",
+            type: 1,
+            options: [
+                {
+                    name: "id",
+                    description: "desired channel ID",
+                    required: true,
+                    type: 7,
+                },
+            ],
+        },
+        {
+            name: "message",
+            description: "output to a user's DMs (this doesn't work)",
+            type: 1,
+            options: [
+                {
+                    name: "user",
+                    description: "user to send outputs to",
+                    required: true,
+                    type: 6,
+                },
+            ],
+        },
+        {
+            name: "sheets",
+            description: "output to a google sheet",
+            type: 1,
+            options: [
+                {
+                    name: "url",
+                    description: "google sheets URL",
+                    required: true,
+                    type: 3,
+                },
+            ],
+        },
+    ],
     async execute(
         interaction: CommandInteraction,
         options: CommandInteractionOptionResolver
     ) {
         const channel = interaction.channel as TextBasedChannel;
         const author = interaction.member as GuildMember;
+        const mode = options.getSubcommand();
+        let system: System = "D";
 
         if (author && !author.permissions.has("ManageRoles")) {
             return interaction.reply({
@@ -97,24 +145,23 @@ export default {
             });
         }
 
-        let mode = options.getString("method") as System;
-        let streamChannel = options.getChannel("channel");
+        let streamChannel;
         let sheetsID = "";
         let dlID = "";
         let rolesChannels = {} as { [key: string]: string };
         switch (mode) {
-            case "C":
-                if (!streamChannel) {
-                    return interaction.reply({
-                        content:
-                            ":x: You didn't link a valid channel. Please run the command again and link the channel you'd like the stats to be put in.",
-                        ephemeral: true,
-                    });
-                }
+            case "channel":
+                system = "C";
+                // channel needs to be checked to make sure it's text
+                let channel = options.getChannel("id");
+                streamChannel = channel;
                 break;
-            case "DM":
-                break;
-            case "S":
+            case "message":
+                return interaction.reply(
+                    "sorry, this feature doesn't exist yet."
+                );
+            case "sheets":
+                system = "S";
                 let sheetsLink = options.getString("url");
                 if (
                     !(
@@ -133,57 +180,35 @@ export default {
                 sheetsID = sheetsLink.split("/")[5];
 
                 break;
-            case "DL":
-                let dlLink = options.getString("url");
-                if (
-                    !(
-                        dlLink &&
-                        dlLink.startsWith(
-                            "https://draft-league.nl/public/pages/league.php?league="
-                        )
-                    )
-                ) {
-                    return interaction.reply({
-                        content:
-                            ":x: This is not a valid draft-league.nl public URL.",
-                        ephemeral: true,
-                    });
-                }
-
-                let dlParams = new URLSearchParams(dlLink.split("?")[1]);
-                let dlIDTemp = dlParams.get("league");
-                if (!dlIDTemp)
-                    return interaction.reply({
-                        content: ":x: League ID not found.",
-                        ephemeral: true,
-                    });
-                dlID = dlIDTemp;
-
-                const dlResponse = await axios.get(
-                    `${process.env.DL_API_URL}/league/${dlID}?key=${process.env.DL_API_KEY}`,
-                    {
-                        headers: { "User-Agent": "PorygonTheBot" },
-                    }
-                );
-                const dlData = dlResponse.data;
-                if (!dlData.mod_discords.includes(`<@${author.id}>`)) {
-                    return interaction.reply({
-                        content:
-                            ":x: You're not a moderator on the website for the given league.",
-                        ephemeral: true,
-                    });
-                }
-                break;
-            case "R":
-                //TODO find a way to implement roles
-                break;
+            case "describe":
+                const modesDetail = new EmbedBuilder()
+                    .setColor(0xe15d75)
+                    .setTitle("Mode Details")
+                    .addFields(
+                        {
+                            name: "Channel",
+                            value: "Sends replay data to the text channel specified by [parameter].",
+                        },
+                        {
+                            name: "DM",
+                            value: "DMs replay data. Gotta be honest fellas, harbar didn't implement DM yet and if you run `/mode DM` nothing will happen. One of us might get around to fixing that, but we sure haven't yet.",
+                        },
+                        {
+                            name: "Sheets",
+                            value: "Sends replay data to the Google Sheets spreadsheet specified by [parameter].",
+                        }
+                    );
+                return interaction.reply({
+                    embeds: [modesDetail],
+                    ephemeral: true,
+                });
             default:
                 break;
         }
 
-        await updateDb(interaction, channel, mode, {
+        await updateDb(interaction, channel, system, {
             channelId: channel.id,
-            system: mode,
+            system: system,
             guildId: interaction.guild?.id,
             resultsChannelId: streamChannel?.id,
             dlId: dlID,
