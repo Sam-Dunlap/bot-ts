@@ -10,6 +10,7 @@ import modeCommand from "./mode.js";
 import renameCommand from "./rename.js";
 import ruleCommand from "./rule.js";
 import rulesCommand from "./rules.js";
+import bulkCommand from "./bulk-analyze.js";
 // import startTrackCommand from "./start-track.js";
 
 //Aggregating all the commands
@@ -24,6 +25,7 @@ const commandsArr: Command[] = [
     renameCommand,
     ruleCommand,
     rulesCommand,
+    bulkCommand,
     // startTrackCommand,
 ];
 
