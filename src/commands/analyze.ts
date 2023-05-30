@@ -57,22 +57,23 @@ export default {
             });
         if (!response)
             return await interaction.editReply(
-                ":x: Something went wrong. Please check your reply link."
+                ":x: Something went wrong. Please check your replay link."
             );
         let data = response.data;
 
         //Getting the rules
         let rules = await Prisma.getRules(interaction.channel?.id as string);
-
+        let date = interaction.createdAt;
         let replayer = new ReplayTracker(replayLink, rules);
         const matchJson = await replayer.track(data);
-        const csvResponse = funcs.formatToCSV(matchJson);
+        const csvResponse = funcs.formatToCSV(matchJson, date);
         writeFileSync("output.csv", csvResponse);
         await interaction.editReply(
             `${matchJson.playerNames[0]} vs ${matchJson.playerNames[1]}`
         );
 
         if (matchJson.error) {
+            console.log(`error: ${matchJson.error}`);
             return await interaction.editReply(matchJson.error);
         }
         console.log(`${link} has been analyzed!`);

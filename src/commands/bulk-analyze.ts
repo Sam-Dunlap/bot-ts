@@ -5,7 +5,7 @@ import {
 
 import axios from "axios";
 import { Prisma, ReplayTracker, funcs } from "../utils/index.js";
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 
 export default {
     name: "bulk",
@@ -23,6 +23,7 @@ export default {
         options: CommandInteractionOptionResolver
     ) {
         await interaction.deferReply();
+        const date = interaction.createdAt;
         const linkFileURL = options.getAttachment("links")?.url;
         const rules = await Prisma.getRules(interaction.channel?.id as string);
         if (!linkFileURL) return;
@@ -33,7 +34,7 @@ export default {
         });
         writeFileSync(
             `output${interaction.id as string}.csv`,
-            "Battle,Coach,Pokemon,Status,Status Inflictor,Direct Kills,Passive Kills,Died,Killer,Tera,Brought,Won,Lead,Turns on Field\n"
+            "Date,Battle,Coach,Pokemon,Status,Status Inflictor,Direct Kills,Passive Kills,Died,Killer,Tera,Brought,Won,Lead,Turns on Field\n"
         );
         if (!response) return;
         const linkCSV = response.data;
@@ -61,11 +62,14 @@ export default {
 
             let replayer = new ReplayTracker(log, rules);
             const matchJson = await replayer.track(data);
-            const csvResponse = funcs.formatToCSV(matchJson);
+            const csvResponse = funcs.formatToCSV(matchJson, date);
             writeFileSync(`output${interaction.id}.csv`, csvResponse, {
                 flag: "a+",
             });
         });
-        await interaction.editReply({ files: [`output${interaction.id}.csv`] });
+        await interaction.editReply(":hourglass_flowing_sand: all done.");
+        return await interaction.channel?.send({
+            files: [`output${interaction.id}.csv`],
+        });
     },
 };
