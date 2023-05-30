@@ -193,6 +193,10 @@ const hazardMoves = [
 ];
 
 const misnomers = [
+    "Basculin",
+    "Squawkabilly",
+    "Polteageist",
+    "Sawsbuck",
     "Gastrodon",
     "Florges",
     "Toxtricity",
@@ -220,7 +224,6 @@ const misnomers = [
     "Pumpkaboo-Small",
     "Gourgeist",
     "Gourgeist-Super",
-    "Oricorio",
     "Arceus-*",
     "Keldeo",
     "Urshifu-*",
@@ -238,8 +241,17 @@ const misnomers = [
     "Alcremie-Salted-Cream",
     "Alcremie-Mint-Cream",
     "Alcremie-Rainbow-Swirl",
-    "Indeedee-F",
     "Zarude-Dada",
+];
+
+const disambiguators = [
+    { unclear: "Oricorio", clear: "Oricorio-Baile" },
+    { unclear: "Tauros-Paldea-Combat", clear: "Tauros-Paldean" },
+    { unclear: "Tauros-Paldea-Aqua", clear: "Tauros-Aqua" },
+    { unclear: "Tauros-Paldea-Blaze", clear: "Tauros-Blaze" },
+    { unclear: "Oinkologne", clear: "Oinkologne-M" },
+    { unclear: "Indeedee", clear: "Indeedee-M" },
+    { unclear: "Lycanroc", clear: "Lycanroc-Midday" },
 ];
 
 //Other bot stuff
@@ -290,24 +302,19 @@ const battleRules = [
     "db",
     "forfeit",
 ];
-const boolRules = [
-    "spoiler",
-    "tb",
-    "combine",
-    "quirks",
-    "notalk"
-];
+const boolRules = ["spoiler", "tb", "combine", "quirks", "notalk"];
 
 const consts = {
+    disambiguators,
     recoilMoves,
     confusionMoves,
     statusMoves,
     statusAbility,
     hazardMoves,
     misnomers,
-	quirkyMessages,
-	battleRules,
-    boolRules
+    quirkyMessages,
+    battleRules,
+    boolRules,
 };
 
 export default consts;
