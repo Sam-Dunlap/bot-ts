@@ -252,6 +252,11 @@ const disambiguators = [
     { unclear: "Oinkologne", clear: "Oinkologne-M" },
     { unclear: "Indeedee", clear: "Indeedee-M" },
     { unclear: "Lycanroc", clear: "Lycanroc-Midday" },
+    { unclear: "Thundurus", clear: "Thundurus-Incarnate" },
+    { unclear: "Landorus", clear: "Landorus-Incarnate" },
+    { unclear: "Tornadus", clear: "Tornadus-Incarnate" },
+    { unclear: "Enamorus", clear: "Enamorus-Incarnate" },
+    { unclear: "Basculegion", clear: "Basculegion-M" },
 ];
 
 //Other bot stuff

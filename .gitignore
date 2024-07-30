@@ -1,6 +1,9 @@
 src/tester.ts
 .env
 
+# CSV replay track output files
+*.csv
+
 # Logs
 logs
 *.log

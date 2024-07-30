@@ -51,7 +51,7 @@ export default {
             })
             .catch(async (e) => {
                 await interaction.editReply(
-                    ":x: Something went wrong. Please check your replay link."
+                    `:x: Something went wrong. Please check your replay link. Error: ${e}`
                 );
                 return;
             });

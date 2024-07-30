@@ -18,6 +18,8 @@ class Pokemon {
     terastallize: Teratype;
     brought: boolean;
     lead: boolean;
+    percentDealt: number;
+    currentHealth: number;
 
     constructor(name: string) {
         this.name = name;
@@ -37,6 +39,8 @@ class Pokemon {
         this.terastallize = "";
         this.brought = false;
         this.lead = false;
+        this.percentDealt = 0;
+        this.currentHealth = 100;
     }
 
     //If the pokemon gets poisoned, burned, etc.
@@ -95,6 +99,14 @@ class Pokemon {
         if (!this.isDead) {
             this.turnsOnBattlefield++;
         }
+    }
+
+    tookDamage(newHealth: number) {
+        this.currentHealth = newHealth;
+    }
+
+    dealtDamage(damage: number) {
+        this.percentDealt += damage;
     }
 }
 

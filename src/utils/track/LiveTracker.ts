@@ -25,9 +25,7 @@ class LiveTracker {
         this.serverType = serverType.toLowerCase().replace(" ", "");
         this.channel = channel;
         this.author = author;
-        this.websocket = new WebSocket(
-            sockets[this.serverType].server
-        );
+        this.websocket = new WebSocket(sockets[this.serverType].server);
     }
 
     async track() {
@@ -236,17 +234,17 @@ class LiveTracker {
                                 battle.p1Pokemon
                             )) {
                                 const newName =
-                                    battle.p1Pokemon[
-                                        pokemonName
-                                    ].realName.split("-")[0];
+                                    battle.p1Pokemon[pokemonName].name.split(
+                                        "-"
+                                    )[0];
                                 if (
                                     consts.misnomers.includes(newName) ||
                                     consts.misnomers.includes(pokemonName) ||
                                     consts.misnomers.includes(
-                                        battle.p1Pokemon[pokemonName].realName
+                                        battle.p1Pokemon[pokemonName].name
                                     )
                                 ) {
-                                    battle.p1Pokemon[pokemonName].realName =
+                                    battle.p1Pokemon[pokemonName].name =
                                         newName;
                                 }
                                 if (pokemonName === "") {
@@ -254,7 +252,7 @@ class LiveTracker {
                                         battle.p1Pokemon
                                     ).find(
                                         ([, value]) =>
-                                            value.realName === pokemonName ||
+                                            value.name === pokemonName ||
                                             value.name === pokemonName
                                     );
                                     if (possibleIndices)
@@ -268,17 +266,17 @@ class LiveTracker {
                                 battle.p2Pokemon
                             )) {
                                 const newName =
-                                    battle.p2Pokemon[
-                                        pokemonName
-                                    ].realName.split("-")[0];
+                                    battle.p2Pokemon[pokemonName].name.split(
+                                        "-"
+                                    )[0];
                                 if (
                                     consts.misnomers.includes(newName) ||
                                     consts.misnomers.includes(pokemonName) ||
                                     consts.misnomers.includes(
-                                        battle.p2Pokemon[pokemonName].realName
+                                        battle.p2Pokemon[pokemonName].name
                                     )
                                 ) {
-                                    battle.p2Pokemon[pokemonName].realName =
+                                    battle.p2Pokemon[pokemonName].name =
                                         newName;
                                 }
                                 if (pokemonName === "") {
@@ -286,7 +284,7 @@ class LiveTracker {
                                         battle.p2Pokemon
                                     ).find(
                                         ([, value]) =>
-                                            value.realName === pokemonName ||
+                                            value.name === pokemonName ||
                                             value.name === pokemonName
                                     );
                                     if (possibleIndices)
@@ -305,24 +303,24 @@ class LiveTracker {
                             for (let pokemonObj of Object.values(
                                 battle.p1Pokemon
                             )) {
-                                const realName = pokemonObj.realName;
+                                const name = pokemonObj.name;
 
                                 if (
                                     !(
                                         Object.keys(killJsonp1).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         ) ||
                                         Object.keys(deathJsonp1).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         )
                                     ) &&
-                                    realName !== ""
+                                    name !== ""
                                 ) {
-                                    killJsonp1[realName] = {
+                                    killJsonp1[name] = {
                                         direct: pokemonObj.directKills,
                                         passive: pokemonObj.passiveKills,
                                     };
-                                    deathJsonp1[realName] = pokemonObj.isDead
+                                    deathJsonp1[name] = pokemonObj.isDead
                                         ? 1
                                         : 0;
                                 }
@@ -335,24 +333,24 @@ class LiveTracker {
                             for (let pokemonObj of Object.values(
                                 battle.p2Pokemon
                             )) {
-                                const realName = pokemonObj.realName;
+                                const name = pokemonObj.name;
 
                                 if (
                                     !(
                                         Object.keys(killJsonp2).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         ) ||
                                         Object.keys(deathJsonp2).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         )
                                     ) &&
-                                    realName !== ""
+                                    name !== ""
                                 ) {
-                                    killJsonp2[realName] = {
+                                    killJsonp2[name] = {
                                         direct: pokemonObj.directKills,
                                         passive: pokemonObj.passiveKills,
                                     };
-                                    deathJsonp2[realName] = pokemonObj.isDead
+                                    deathJsonp2[name] = pokemonObj.isDead
                                         ? 1
                                         : 0;
                                 }
@@ -442,7 +440,11 @@ class LiveTracker {
 
                             //Updating the stats
                             Battle.decrementBattles(this.battlelink);
-                            await update(returnData as Stats, this.channel, this.author);
+                            await update(
+                                returnData as Stats,
+                                this.channel,
+                                this.author
+                            );
 
                             //Done!
                             if (!this.rules.notalk)
@@ -517,17 +519,17 @@ class LiveTracker {
                                 battle.p1Pokemon
                             )) {
                                 const newName =
-                                    battle.p1Pokemon[
-                                        pokemonName
-                                    ].realName.split("-")[0];
+                                    battle.p1Pokemon[pokemonName].name.split(
+                                        "-"
+                                    )[0];
                                 if (
                                     consts.misnomers.includes(newName) ||
                                     consts.misnomers.includes(pokemonName) ||
                                     consts.misnomers.includes(
-                                        battle.p1Pokemon[pokemonName].realName
+                                        battle.p1Pokemon[pokemonName].name
                                     )
                                 ) {
-                                    battle.p1Pokemon[pokemonName].realName =
+                                    battle.p1Pokemon[pokemonName].name =
                                         newName;
                                 }
                                 if (pokemonName === "") {
@@ -535,7 +537,7 @@ class LiveTracker {
                                         battle.p1Pokemon
                                     ).find(
                                         ([, value]) =>
-                                            value.realName === pokemonName ||
+                                            value.name === pokemonName ||
                                             value.name === pokemonName
                                     );
                                     if (possibleIndices)
@@ -549,17 +551,17 @@ class LiveTracker {
                                 battle.p2Pokemon
                             )) {
                                 const newName =
-                                    battle.p2Pokemon[
-                                        pokemonName
-                                    ].realName.split("-")[0];
+                                    battle.p2Pokemon[pokemonName].name.split(
+                                        "-"
+                                    )[0];
                                 if (
                                     consts.misnomers.includes(newName) ||
                                     consts.misnomers.includes(pokemonName) ||
                                     consts.misnomers.includes(
-                                        battle.p2Pokemon[pokemonName].realName
+                                        battle.p2Pokemon[pokemonName].name
                                     )
                                 ) {
-                                    battle.p2Pokemon[pokemonName].realName =
+                                    battle.p2Pokemon[pokemonName].name =
                                         newName;
                                 }
                                 if (pokemonName === "") {
@@ -567,7 +569,7 @@ class LiveTracker {
                                         battle.p2Pokemon
                                     ).find(
                                         ([, value]) =>
-                                            value.realName === pokemonName ||
+                                            value.name === pokemonName ||
                                             value.name === pokemonName
                                     );
                                     if (possibleIndices)
@@ -586,24 +588,24 @@ class LiveTracker {
                             for (let pokemonObj of Object.values(
                                 battle.p1Pokemon
                             )) {
-                                const realName = pokemonObj.realName;
+                                const name = pokemonObj.name;
 
                                 if (
                                     !(
                                         Object.keys(killJsonp1).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         ) ||
                                         Object.keys(deathJsonp1).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         )
                                     ) &&
-                                    realName !== ""
+                                    name !== ""
                                 ) {
-                                    killJsonp1[realName] = {
+                                    killJsonp1[name] = {
                                         direct: pokemonObj.directKills,
                                         passive: pokemonObj.passiveKills,
                                     };
-                                    deathJsonp1[realName] = pokemonObj.isDead
+                                    deathJsonp1[name] = pokemonObj.isDead
                                         ? 1
                                         : 0;
                                 }
@@ -616,24 +618,24 @@ class LiveTracker {
                             for (let pokemonObj of Object.values(
                                 battle.p2Pokemon
                             )) {
-                                const realName = pokemonObj.realName;
+                                const name = pokemonObj.name;
 
                                 if (
                                     !(
                                         Object.keys(killJsonp2).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         ) ||
                                         Object.keys(deathJsonp2).includes(
-                                            pokemonObj.realName
+                                            pokemonObj.name
                                         )
                                     ) &&
-                                    realName !== ""
+                                    name !== ""
                                 ) {
-                                    killJsonp2[realName] = {
+                                    killJsonp2[name] = {
                                         direct: pokemonObj.directKills,
                                         passive: pokemonObj.passiveKills,
                                     };
-                                    deathJsonp2[realName] = pokemonObj.isDead
+                                    deathJsonp2[name] = pokemonObj.isDead
                                         ? 1
                                         : 0;
                                 }
@@ -721,7 +723,11 @@ class LiveTracker {
 
                             //Updating the stats
                             Battle.decrementBattles(this.battlelink);
-                            await update(returnData as Stats, this.channel, this.author);
+                            await update(
+                                returnData as Stats,
+                                this.channel,
+                                this.author
+                            );
 
                             //Done!
                             this.channel.send(
@@ -735,9 +741,9 @@ class LiveTracker {
                     //At the beginning of every non-randoms match, a list of Pokemon show up.
                     //This code is to get all that
                     if (line.startsWith(`|poke|`)) {
-                        const realName = parts[2].split(",")[0];
-                        const pokemonName = realName.split("-")[0];
-                        const pokemon = new Pokemon(pokemonName, realName);
+                        const name = parts[2].split(",")[0];
+                        const pokemonName = name.split("-")[0];
+                        const pokemon = new Pokemon(pokemonName);
                         const side = parts[1] as "p1" | "p2";
 
                         battle[`${side}Pokemon` as const][pokemonName] =
@@ -783,16 +789,16 @@ class LiveTracker {
 
                         battle[side] =
                             battle[`${playerSide}Pokemon` as const][replacer];
-                        battle[side].realName = replacerRealName;
+                        battle[side].name = replacerRealName;
                         battle[`${playerSide}Pokemon` as const][
-                            battle[side].realName
+                            battle[side].name
                         ] = battle[side];
 
                         console.log(
                             `${battle.battlelink}: ${
-                                oldPokemon.realName || oldPokemon.name
+                                oldPokemon.name || oldPokemon.name
                             } has been switched into ${
-                                battle[side].realName || battle[side].name
+                                battle[side].name || battle[side].name
                             }`
                         );
                     }
@@ -811,10 +817,10 @@ class LiveTracker {
 
                         console.log(
                             `${battle.battlelink}: ${
-                                battle[`${userSide}a` as const].realName ||
+                                battle[`${userSide}a` as const].name ||
                                 battle[`${userSide}a` as const].name
                             } has swapped with ${
-                                battle[`${userSide}b` as const].realName ||
+                                battle[`${userSide}b` as const].name ||
                                 battle[`${userSide}b` as const].name
                             } due to ${parts[3].split(": ")[1]}`
                         );
@@ -843,9 +849,9 @@ class LiveTracker {
 
                         console.log(
                             `${battle.battlelink}: ${
-                                oldPokemon.realName || oldPokemon.name
+                                oldPokemon.name || oldPokemon.name
                             } has been replaced by ${
-                                battle[side].realName || battle[side].name
+                                battle[side].name || battle[side].name
                             }`
                         );
 
@@ -892,8 +898,8 @@ class LiveTracker {
                                 | "p1b"
                                 | "p2a"
                                 | "p2b";
-                            let realName = parts[2].split(",")[0];
-                            battle[side].realName = realName;
+                            let name = parts[2].split(",")[0];
+                            battle[side].name = name;
                         }
                         dataArr.splice(dataArr.length - 1, 1);
                     }
@@ -913,7 +919,7 @@ class LiveTracker {
                             .split(": ")[0] as "p1a" | "p1b" | "p2a" | "p2b";
 
                         battle[victimSide].otherAffliction[move] =
-                            battle[prevMoveUserSide].realName ||
+                            battle[prevMoveUserSide].name ||
                             battle[prevMoveUserSide].name;
 
                         dataArr.splice(dataArr.length - 1, 1);
@@ -927,9 +933,9 @@ class LiveTracker {
                                 | "p1b"
                                 | "p2a"
                                 | "p2b";
-                            let realName = parts[2].split(",")[0];
+                            let name = parts[2].split(",")[0];
 
-                            battle[side].realName = realName;
+                            battle[side].name = name;
                         }
 
                         dataArr.splice(dataArr.length - 1, 1);
@@ -953,7 +959,7 @@ class LiveTracker {
                                     | "p2a"
                                     | "p2b";
                                 inflictor =
-                                    battle[side].realName || battle[side].name;
+                                    battle[side].name || battle[side].name;
                             } catch (e) {
                                 //Weather is caused by a move
                                 let prevLine = dataArr[dataArr.length - 2];
@@ -966,7 +972,7 @@ class LiveTracker {
                                     | "p2a"
                                     | "p2b";
                                 inflictor =
-                                    battle[side].realName || battle[side].name;
+                                    battle[side].name || battle[side].name;
                             }
                             console.log(
                                 `${battle.battlelink}: ${inflictor} caused ${weather}.`
@@ -1007,7 +1013,7 @@ class LiveTracker {
                                 .split(":")[0] as "p1a" | "p1b" | "p2a" | "p2b";
 
                             battle[victimSide].otherAffliction[move] =
-                                battle[inflictorSide].realName ||
+                                battle[inflictorSide].name ||
                                 battle[inflictorSide].name;
                         }
                         if (
@@ -1039,10 +1045,10 @@ class LiveTracker {
                                 | "p2b";
                             battle.history.push(
                                 `${
-                                    battle[inflictorSide].realName ||
+                                    battle[inflictorSide].name ||
                                     battle[inflictorSide].name
                                 } missed ${move} against ${
-                                    battle[victimSide].realName ||
+                                    battle[victimSide].name ||
                                     battle[victimSide].name
                                 } (Turn ${battle.turns}).`
                             );
@@ -1068,10 +1074,10 @@ class LiveTracker {
 
                             battle.history.push(
                                 `${
-                                    battle[inflictorSide].realName ||
+                                    battle[inflictorSide].name ||
                                     battle[inflictorSide].name
                                 } used ${prevMove} with a critical hit against ${
-                                    battle[victimSide].realName ||
+                                    battle[victimSide].name ||
                                     battle[victimSide].name
                                 } (Turn ${battle.turns}).`
                             );
@@ -1107,7 +1113,7 @@ class LiveTracker {
 
                             inflictor = battle[inflictorSide].name;
                             victim =
-                                battle[victimSide].realName ||
+                                battle[victimSide].name ||
                                 battle[victimSide].name;
                             battle[victimSide].statusEffect(
                                 parts[2] === "tox" ? "psn" : parts[2],
@@ -1115,7 +1121,7 @@ class LiveTracker {
                                 "P"
                             );
                             inflictor =
-                                battle[inflictorSide].realName ||
+                                battle[inflictorSide].name ||
                                 battle[inflictorSide].name;
                         } else if (
                             (prevMoveLine.startsWith(`|move|`) &&
@@ -1144,10 +1150,10 @@ class LiveTracker {
                                 "P"
                             );
                             inflictor =
-                                battle[inflictorSide].realName ||
+                                battle[inflictorSide].name ||
                                 battle[inflictorSide].name;
                             victim =
-                                battle[victimSide].realName ||
+                                battle[victimSide].name ||
                                 battle[victimSide].name;
                         } else if (
                             (line.includes("ability") &&
@@ -1164,7 +1170,7 @@ class LiveTracker {
                             ) as "p1a" | "p1b" | "p2a" | "p2b";
                             inflictor = battle[inflictorSide].name;
                             victim =
-                                battle[victimSide].realName ||
+                                battle[victimSide].name ||
                                 battle[victimSide].name;
                             battle[victimSide].statusEffect(
                                 parts[2],
@@ -1172,12 +1178,12 @@ class LiveTracker {
                                 this.rules.abilityitem
                             );
                             inflictor =
-                                battle[inflictorSide].realName ||
+                                battle[inflictorSide].name ||
                                 battle[inflictorSide].name;
                         } else {
                             //If status wasn't caused by a move, but rather Toxic Spikes
                             victim =
-                                battle[victimSide].realName ||
+                                battle[victimSide].name ||
                                 battle[victimSide].name;
                             if (victimSide.startsWith("p1")) {
                                 inflictor =
@@ -1212,7 +1218,7 @@ class LiveTracker {
 
                         if (parts[2].includes("flinch")) {
                             battle.history.push(
-                                `${battle[userSide].realName} flinched (Turn ${battle.turns}).`
+                                `${battle[userSide].name} flinched (Turn ${battle.turns}).`
                             );
                         }
                     }
@@ -1266,7 +1272,7 @@ class LiveTracker {
 
                         battle.history.push(
                             `${hazard} has been removed by ${
-                                battle[removerSide].realName ||
+                                battle[removerSide].name ||
                                 battle[removerSide].name
                             } with ${move} (Turn ${battle.turns}).`
                         );
@@ -1322,11 +1328,11 @@ class LiveTracker {
                                               .substring(0, 2)
                                               .replace("2", "1")
                                 ][move] =
-                                    battle[afflictorSide].realName ||
+                                    battle[afflictorSide].name ||
                                     battle[afflictorSide].name;
                             } else {
                                 let victim =
-                                    battle[side].realName || battle[side].name;
+                                    battle[side].name || battle[side].name;
                                 afflictor = battle[afflictorSide].name;
                                 battle[side].otherAffliction[move] = afflictor;
 
@@ -1353,8 +1359,7 @@ class LiveTracker {
                             let killer = "";
                             let afflictor =
                                 battle[side].otherAffliction["perish3"];
-                            let victim =
-                                battle[side].realName || battle[side].name;
+                            let victim = battle[side].name || battle[side].name;
                             let currentPlayer = side.substring(0, 2) as
                                 | "p1"
                                 | "p2";
@@ -1377,7 +1382,7 @@ class LiveTracker {
                                 if (this.rules.suicide !== "N") {
                                     killer =
                                         battle[`${currentPlayer}a` as const]
-                                            .realName ||
+                                            .name ||
                                         battle[`${currentPlayer}a` as const]
                                             .name;
                                 }
@@ -1551,7 +1556,7 @@ class LiveTracker {
                                             killer =
                                                 this.rules.selfteam !== "N"
                                                     ? battle[oppositeSide]
-                                                          .realName ||
+                                                          .name ||
                                                       battle[oppositeSide].name
                                                     : "";
                                         }
@@ -1562,7 +1567,7 @@ class LiveTracker {
                                             ][killer].killed(deathJson);
                                         }
                                         victim =
-                                            battle[victimSide].realName ||
+                                            battle[victimSide].name ||
                                             battle[victimSide].name;
 
                                         reason = `${move} (passive) (Turn ${battle.turns})`;
@@ -1593,7 +1598,7 @@ class LiveTracker {
                                             killer =
                                                 this.rules.selfteam !== "N"
                                                     ? battle[oppositeSide]
-                                                          .realName ||
+                                                          .name ||
                                                       battle[oppositeSide].name
                                                     : "";
 
@@ -1605,7 +1610,7 @@ class LiveTracker {
                                             killer = "an ally";
                                         }
                                         victim =
-                                            battle[victimSide].realName ||
+                                            battle[victimSide].name ||
                                             battle[victimSide].name;
 
                                         reason = `${move} (passive) (Turn ${battle.turns})`;
@@ -1641,7 +1646,7 @@ class LiveTracker {
                                         }
 
                                         victim =
-                                            battle[victimSide].realName ||
+                                            battle[victimSide].name ||
                                             battle[victimSide].name;
                                         reason = `${move} (${
                                             battle[victimSide].statusType ===
@@ -1672,7 +1677,7 @@ class LiveTracker {
                                             ][killer].killed(deathJson);
                                         }
                                         victim =
-                                            battle[victimSide].realName ||
+                                            battle[victimSide].name ||
                                             battle[victimSide].name;
 
                                         reason = `recoil (${
@@ -1700,12 +1705,11 @@ class LiveTracker {
 
                                         if (owner === victimSide) {
                                             victim =
-                                                battle[owner].realName ||
+                                                battle[owner].name ||
                                                 battle[owner].name;
                                             if (this.rules.suicide !== "N")
                                                 victim =
-                                                    battle[victimSide]
-                                                        .realName ||
+                                                    battle[victimSide].name ||
                                                     battle[victimSide].name;
 
                                             let deathJson = battle[
@@ -1729,8 +1733,7 @@ class LiveTracker {
                                         } else {
                                             if (!battle[victimSide].isDead) {
                                                 victim =
-                                                    battle[victimSide]
-                                                        .realName ||
+                                                    battle[victimSide].name ||
                                                     battle[victimSide].name;
 
                                                 if (
@@ -1739,7 +1742,7 @@ class LiveTracker {
                                                 )
                                                     killer =
                                                         battle[oppositeSide]
-                                                            .realName ||
+                                                            .name ||
                                                         battle[oppositeSide]
                                                             .name;
                                                 else killer = "";
@@ -1777,7 +1780,7 @@ class LiveTracker {
                                                 move
                                             ] || "";
                                         victim =
-                                            battle[victimSide].realName ||
+                                            battle[victimSide].name ||
                                             battle[victimSide].name;
 
                                         if (
@@ -1785,7 +1788,7 @@ class LiveTracker {
                                             killer.includes(victim)
                                         )
                                             killer =
-                                                battle[oppositeSide].realName ||
+                                                battle[oppositeSide].name ||
                                                 battle[oppositeSide].name;
 
                                         let deathJson = battle[victimSide].died(
@@ -1836,7 +1839,7 @@ class LiveTracker {
                                     ][killer].killed(deathJson);
 
                                     victim =
-                                        battle[victimSide].realName ||
+                                        battle[victimSide].name ||
                                         battle[victimSide].name;
                                     reason = `${prevMove} (direct) (Turn ${battle.turns})`;
                                 } else {
@@ -1886,7 +1889,7 @@ class LiveTracker {
                                                 | "p2b";
 
                                         killer =
-                                            battle[prevMoveUserSide].realName ||
+                                            battle[prevMoveUserSide].name ||
                                             battle[prevMoveUserSide].name;
                                         let deathJson = battle[victimSide].died(
                                             "direct",
@@ -1910,7 +1913,7 @@ class LiveTracker {
                                             battle[victimSide].isDead
                                         )
                                             victim =
-                                                battle[victimSide].realName ||
+                                                battle[victimSide].name ||
                                                 battle[victimSide].name;
 
                                         reason = `${prevMove} (direct) (Turn ${battle.turns})`;
@@ -1967,7 +1970,7 @@ class LiveTracker {
                                     | "p2b";
                                 let killer = "";
                                 let victim =
-                                    battle[victimSide].realName ||
+                                    battle[victimSide].name ||
                                     battle[victimSide].name;
                                 if (this.rules.db !== "N") {
                                     killer = battle[killerSide].name;
@@ -2016,13 +2019,13 @@ class LiveTracker {
                                     ) as "p1a" | "p1b" | "p2a" | "p2b";
 
                                     killer =
-                                        battle[newSide].realName ||
+                                        battle[newSide].name ||
                                         battle[newSide].name;
                                 }
 
                                 if (!battle[victimSide].isDead) {
                                     victim =
-                                        battle[victimSide].realName ||
+                                        battle[victimSide].name ||
                                         battle[victimSide].name;
 
                                     let deathJson = battle[victimSide].died(
@@ -2066,10 +2069,10 @@ class LiveTracker {
                                         ": "
                                     )[0] as "p1a" | "p1b" | "p2a" | "p2b";
                                     killer =
-                                        battle[killerSide].realName ||
+                                        battle[killerSide].name ||
                                         battle[killerSide].name;
                                     victim =
-                                        battle[victimSide].realName ||
+                                        battle[victimSide].name ||
                                         battle[victimSide].name;
 
                                     let deathJson = battle[victimSide].died(

@@ -34,7 +34,7 @@ export default {
         });
         writeFileSync(
             `output${interaction.id as string}.csv`,
-            "Date,Battle,Coach,Pokemon,Status,Status Inflictor,Direct Kills,Passive Kills,Died,Killer,Tera,Brought,Won,Lead,Turns on Field\n"
+            "Date,Battle,Coach,Pokemon,Status,Status Inflictor,Direct Kills,Passive Kills,Died,Killer,Tera,Brought,Won,Lead,Turns on Field,Damage Dealt,Remaining Health\n"
         );
         if (!response) return;
         const linkCSV = response.data;
@@ -60,7 +60,7 @@ export default {
             }
             let data = response.data;
 
-            let replayer = new ReplayTracker(log, rules);
+            let replayer = new ReplayTracker(link, rules);
             const matchJson = await replayer.track(data);
             const csvResponse = funcs.formatToCSV(matchJson, date);
             writeFileSync(`output${interaction.id}.csv`, csvResponse, {
