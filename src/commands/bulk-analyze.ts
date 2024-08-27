@@ -38,7 +38,7 @@ export default {
         );
         if (!response) return;
         const linkCSV = response.data;
-        const linkArray = linkCSV.split(",");
+        const linkArray = linkCSV.split(/\s+/);
         linkArray.forEach(async (link: string) => {
             let log = link + ".log";
             let response = await axios
