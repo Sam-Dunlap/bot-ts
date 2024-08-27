@@ -343,6 +343,7 @@ class ReplayTracker {
                     );
                     // Uncomment below for helpful bug tracking
                     // console.log(`line ${lineNum} - name: ${replacerRealName}`);
+
                     const side = parts[1].split(": ")[0] as
                         | "p1a"
                         | "p1b"
@@ -353,7 +354,7 @@ class ReplayTracker {
                     // this is all just to fix urshifu's name once his forme is disambiguated -___-
                     // if the incoming pokemon is named Urshifu-something and there is not yet an Urshifu-something key
                     // in battle[playersidePokemon], this will find the Urshifu object and rename it Urshifu-something
-                    // now checks for gen 8 dogs too
+                    // now checks for gen 8 dogs
                     const playerPokemon =
                         battle[`${playerSide}Pokemon` as const];
                     if (
@@ -371,14 +372,14 @@ class ReplayTracker {
                             playerPokemon["Urshifu"];
                         delete playerPokemon["Urshifu"];
                     } else if (
-                        replacerRealName.includes("Zacian") &&
+                        replacerRealName === "Zacian-Crowned" &&
                         !Object.keys(playerPokemon).includes("Zacian-Crowned")
                     ) {
                         playerPokemon[replacerRealName] =
                             playerPokemon["Zacian"];
                         delete playerPokemon["Zacian"];
                     } else if (
-                        replacerRealName.includes("Zamazenta") &&
+                        replacerRealName === "Zamazenta-Crowned" &&
                         !Object.keys(playerPokemon).includes(
                             "Zamazenta-Crowned"
                         )
