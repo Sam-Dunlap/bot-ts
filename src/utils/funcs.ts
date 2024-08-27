@@ -29,6 +29,9 @@ const fixName = (name: string): string => {
     if (name === "Zacian-*") name = "Zacian";
     if (name === "Zamazenta-*") name = "Zamazenta";
     if (name.endsWith("Busted")) name = "Mimikyu";
+    if (name.includes("Terapagos")) name = "Terapagos-Terastal";
+    if (name.startsWith("Ogerpon") && name.endsWith("-Tera"))
+        name = name.slice(0, -5);
     return name;
 };
 
